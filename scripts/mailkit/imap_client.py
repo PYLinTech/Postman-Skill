@@ -36,6 +36,11 @@ _FOLDER_ALIASES = {
 _MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 _DATE_RE = re.compile(r"^(\d{4})-(\d{1,2})-(\d{1,2})$")
+# One IMAP LIST response line: (flags) "delimiter" name.  The delimiter is
+# normally quoted (NetEase sends "/", some servers send NIL, others send a
+# bare "."), and the mailbox name may or may not be quoted, so both are matched
+# loosely here and stripped by the caller.
+_LIST_RE = re.compile(r'\((?P<flags>[^)]*)\)\s+(?P<delim>NIL|"[^"]*"|\S+)\s+(?P<name>.+?)\s*$')
 
 
 def _quote_folder(name: str) -> str:
@@ -171,7 +176,7 @@ class ImapSession:
         out: List[Dict[str, Any]] = []
         for raw in data or []:
             line = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else str(raw)
-            match = re.match(r'\((?P<flags>[^)]*)\)\s+"?(?P<delim>[^" ]+)\s+(?P<name>.+?)"?$', line)
+            match = _LIST_RE.match(line)
             if not match:
                 continue
             name = match.group("name").strip().strip('"')
@@ -179,7 +184,7 @@ class ImapSession:
             out.append({
                 "name": name,
                 "special": next((f.lstrip("\\") for f in flags if f.startswith("\\")), ""),
-                "delimiter": match.group("delim"),
+                "delimiter": match.group("delim").strip('"'),
             })
         return out
 
