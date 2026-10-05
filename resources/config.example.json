@@ -1,0 +1,42 @@
+{
+  "_comment": [
+    "Copy to a location outside the skill directory, fill in the values, and",
+    "protect it:  chmod 600 mail.json",
+    "Pass it with:  mail.py --config /path/to/mail.json <command>",
+    "or set MAIL_CONFIG=/path/to/mail.json in the environment."
+  ],
+
+  "address": "you@qq.com",
+  "password": "your-app-specific-password",
+  "sender_name": "Your Name",
+
+  "_optional_fields": {
+    "provider": "Leave as auto to derive the server from the address domain. Set explicitly (qq, 163, 126, yeah, gmail, outlook, hotmail, live, yahoo, foxmail, sohu, sina, aliyun, tom) only when the address domain is unusual.",
+    "imap_host": "Override only for a custom or corporate server.",
+    "imap_port": 993,
+    "smtp_host": "Override only for a custom or corporate server.",
+    "smtp_port": 587,
+    "smtp_security": "Leave empty to derive from the port: 465 = ssl, 587 = starttls, anything else = plain. Set to ssl / starttls / none to pin it.",
+    "timeout": 30,
+    "verify_ssl": true,
+    "send_as": "Set when the From address differs from the login address.",
+    "client_name": "Name sent in the RFC 2971 IMAP ID handshake. Optional; defaults to python-mailkit. Some providers (NetEase, QQ) reject login without an ID."
+  },
+
+  "accounts": {
+    "work": {
+      "address": "you@company.com",
+      "password": "work-app-password",
+      "imap_host": "imap.company.com",
+      "imap_port": 993,
+      "smtp_host": "smtp.company.com",
+      "smtp_port": 587
+    },
+    "personal": {
+      "address": "you@163.com",
+      "password": "personal-app-password"
+    }
+  },
+
+  "_how_to_select_an_account": "mail.py --config mail.json --account work check"
+}

@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境（本项目零依赖，但本地调试时容易生成）
+.venv/
+venv/
+
+# 编辑器与操作系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 凭据——本仓库没有 CI，一旦提交上去就是公开事故
+#
+# 工具本身**没有**默认配置文件路径：mail.json 只是文档里的建议名，
+# 真实文件名由使用者决定。因此这里覆盖的是常见命名，不是某一个固定名。
+# 推荐做法是把配置放在仓库之外（`--config ~/mail.json`），但仍在此拦截。
+mail.json
+mail*.json
+*-mail.json
+*.local.json
+
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# download 子命令的 --dir 默认是当前目录；用仓库根目录跑容易把附件落在树里
+/downloads/
